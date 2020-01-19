@@ -1,0 +1,23 @@
+{
+    "browser_action": {
+        "default_title": "Stardew Bundle Checkboxes"
+    },
+    "icons": {
+        "16": "icon16.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
+    },
+    "incognito": "spanning",
+    "description": "Keep track of your bundle progress on stardewvalleywiki.com. Works in incognito as long as it's enabled in the settings.",
+    "short_name": "Stardew Checkboxes",
+    "manifest_version": 2,
+    "name": "Stardew Bundle Checkboxes",
+    "version": "1.0.4",
+	"content_scripts":[
+        {
+            "matches": ["https://stardewvalleywiki.com/Bundles*"],
+            "js": ["jquery.min.js", "stardew.js"],
+            "run_at": "document_idle"
+        }
+    ]
+}
