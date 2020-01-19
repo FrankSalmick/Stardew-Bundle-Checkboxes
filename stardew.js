@@ -1,6 +1,6 @@
 var bundleDict = {};
 // TODO: Make a way for users to update this value
-var numCheckboxes = 2;
+var numCheckboxes = 1;
 
 // The function to handle a click event on the checkboxes. Needs to be up here.
 const processClick = function(event) {
@@ -8,9 +8,6 @@ const processClick = function(event) {
     var bundleName = $(sender).attr("data-bundle-name");
     var itemName = $(sender).attr("data-item-name");
     var storageBundleItems = (localStorage.getItem(bundleName) || "").split(",");
-    if (storageBundleItems[0] == "") {
-        storageBundleItems.splice(0, 1);
-    }
     var index = storageBundleItems.indexOf(itemName);
     if (index >= 0) {
         // Record that it's no longer clicked
