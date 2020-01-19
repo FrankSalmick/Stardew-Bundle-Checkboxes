@@ -1,4 +1,31 @@
 var bundleDict = {};
+// TODO: Make a way for users to update this value
+var numCheckboxes = 2;
+
+// The function to handle a click event on the checkboxes. Needs to be up here.
+const processClick = function(event) {
+    var sender = event.target;  
+    var bundleName = $(sender).attr("data-bundle-name");
+    var itemName = $(sender).attr("data-item-name");
+    var storageBundleItems = (localStorage.getItem(bundleName) || "").split(",");
+    if (storageBundleItems[0] == "") {
+        storageBundleItems.splice(0, 1);
+    }
+    var index = storageBundleItems.indexOf(itemName);
+    if (index >= 0) {
+        // Record that it's no longer clicked
+        storageBundleItems.splice(index, 1);
+    }
+    else {
+        storageBundleItems.push(itemName);
+    }
+    // Remove the key if no more items are checked in that table
+    if (storageBundleItems.length == 0) {
+        localStorage.removeItem(bundleName);
+    } else {
+        localStorage.setItem(bundleName, storageBundleItems);
+    }
+}
 // Load items
 $("tbody").each((tableIter, tableItem) => {
     // Multiple parts of this expression could be undefined or null, so we just try/catch it instead of having a check for every single possibility.
@@ -43,39 +70,20 @@ $("tbody").each((tableIter, tableItem) => {
         var itemsToCheck = (localStorage.getItem(bundleName) || "").split(",");
         // Create the checkboxes
         for (const checkItem in bundleDict[bundleName]) {
-            var nametemplate = bundleDict[bundleName][checkItem];
-            var newCheckbox = document.createElement("input");
-            $(newCheckbox).attr("type", "checkbox");
-            $(newCheckbox).attr("data-bundle-name", bundleName);
-            $(newCheckbox).attr("data-item-name", checkItem);
-            // Register an event to add/remove items from localstorage
-            $(newCheckbox).on("click", (event) => {
-                var sender = event.target;  
-                var bundleName = $(sender).attr("data-bundle-name");
-                var itemName = $(sender).attr("data-item-name");
-                var storageBundleItems = (localStorage.getItem(bundleName) || "").split(",");
-                if (storageBundleItems[0] == "") {
-                    storageBundleItems.splice(0, 1);
+            for (var i = 0; i < numCheckboxes; i++) {
+                var itemName = checkItem + "-" + i;
+                var nametemplate = bundleDict[bundleName][checkItem];
+                var newCheckbox = document.createElement("input");
+                $(newCheckbox).attr("type", "checkbox");
+                $(newCheckbox).attr("data-bundle-name", bundleName);
+                $(newCheckbox).attr("data-item-name", itemName);
+                // Register an event to add/remove items from localstorage
+                $(newCheckbox).on("click", processClick);
+                if (itemsToCheck && itemsToCheck.indexOf(itemName) >= 0) {
+                    $(newCheckbox).attr("checked", "true");
                 }
-                var index = storageBundleItems.indexOf(itemName);
-                if (index >= 0) {
-                    // Record that it's no longer clicked
-                    storageBundleItems.splice(index, 1);
-                }
-                else {
-                    storageBundleItems.push(itemName);
-                }
-                // Remove the key if no more items are checked in that table
-                if (storageBundleItems.length == 0) {
-                    localStorage.removeItem(bundleName);
-                } else {
-                    localStorage.setItem(bundleName, storageBundleItems);
-                }
-            });
-            if (itemsToCheck && itemsToCheck.indexOf(checkItem) >= 0) {
-                $(newCheckbox).attr("checked", "true");
+                nametemplate.prepend(newCheckbox);
             }
-            nametemplate.prepend(newCheckbox);
         };
     }
 });
