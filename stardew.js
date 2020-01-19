@@ -4,7 +4,7 @@ $("tbody").each((tableIter, tableItem) => {
     // Multiple parts of this expression could be undefined or null, so we just try/catch it instead of having a check for every single possibility.
     var bundleName;
     try {
-        bundleName = $($($(tableItem).find("tr")[0]).find("th")[0]).attr("id");
+        bundleName = $(tableItem).find("tr").first().find("th").first().attr("id");
     } catch(e) { }
     if (bundleName != undefined) {
         // We found a bundle table, so we make the checkboxes dict referenced above
@@ -26,11 +26,11 @@ $("tbody").each((tableIter, tableItem) => {
                 itemtd = $(trs[i]).find("td")[0];
             }
             var item = $(itemtd).find("#nametemplate");
-            var itemName = item.text().trim();
-            // "The missing bundle" has weird extra tds, so if we can't find an item name we'll just skip it.
-            if (itemName == undefined || item.length == 0) {
-                continue;
+            // Some items are stored as tables instead of text
+            if (item.length == 0) {
+                item = $(itemtd).find("tbody").first().find("tr").first();
             }
+            var itemName = item.text().trim();
             var index = itemName.indexOf("(");
             if (index != -1) {
                 itemName = itemName.substr(0, index - 1);
