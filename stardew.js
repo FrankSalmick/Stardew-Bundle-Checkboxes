@@ -12,7 +12,7 @@ $("tbody").each((tableIter, tableItem) => {
         var trs = $(tableItem).find("tr");
         // trs[0] is the name of the bundle, so we will skip it.
         // trs[trs.length] is info about the reward, so we skip that too.
-        for (var i = 1; i < trs.length - 1; i++) {
+        for (var i = 1; i < trs.length; i++) {
             // We want to skip the gold bundles. This will break if any single-item bundles come out in the future, but at this point the bundle system doesn't really seem to work that way so it's probably fine.
             if (trs.length == 3) {
                 continue;
@@ -32,6 +32,9 @@ $("tbody").each((tableIter, tableItem) => {
             }
             var itemName = item.text().trim();
             if (itemName != "" && item[0]) {
+                if (listOfItems[itemName] != undefined) {
+                    itemName += "-1";
+                }
                 listOfItems[itemName] = item[0];
             }
         }
