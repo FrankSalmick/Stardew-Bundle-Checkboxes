@@ -31,10 +31,6 @@ $("tbody").each((tableIter, tableItem) => {
                 item = $(itemtd).find("tbody").first().find("tr").first();
             }
             var itemName = item.text().trim();
-            var index = itemName.indexOf("(");
-            if (index != -1) {
-                itemName = itemName.substr(0, index - 1);
-            }
             if (itemName != "" && item[0]) {
                 listOfItems[itemName] = item[0];
             }
