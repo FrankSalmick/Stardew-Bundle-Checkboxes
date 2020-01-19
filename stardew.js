@@ -31,7 +31,6 @@ $("tbody").each((tableIter, tableItem) => {
         bundleName = $(tableItem).find("tr").first().find("th").first().attr("id");
     } catch(e) { }
     if (bundleName != undefined) {
-        // We found a bundle table, so we make the checkboxes dict referenced above
         var listOfItems = {};
         var trs = $(tableItem).find("tr");
         // trs[0] is the name of the bundle, so we will skip it.
@@ -42,7 +41,7 @@ $("tbody").each((tableIter, tableItem) => {
                 continue;
             }
             var itemtd;
-            // i = 0 is a special case because the first two tds are the image and the checkboxes
+            // i = 1 is a special case because the first two tds are the image and the checkboxes
             if (i == 1) {
                 itemtd = $(trs[i]).find("td")[2];
             }
@@ -56,8 +55,12 @@ $("tbody").each((tableIter, tableItem) => {
             }
             var itemName = item.text().trim();
             if (itemName != "" && item[0]) {
+                // Support multiple items of the same name
                 if (listOfItems[itemName] != undefined) {
-                    itemName += "-1";
+                    // Find the next unused item name
+                    var duplicateID = 1;
+                    for (; listOfItems[itemName + "-dup-" + duplicateID] != undefined; duplicateID++);
+                    itemName += "-dup-" + duplicateID;
                 }
                 listOfItems[itemName] = item[0];
             }
