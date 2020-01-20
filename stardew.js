@@ -1,5 +1,5 @@
 // TODO: Make a way for users to update this value. I have it set to two, one for "I have collected this item" and one for "I have turned it in"
-const checkboxesPerRow = 1;
+const checkboxesPerRow = 2;
 var bundles = {};
 
 // The function to handle a click event on the checkboxes. It needs to be defined above the main loop, but the code might make more sense if you read the loop first.
@@ -74,14 +74,14 @@ $("tbody").each((iteration, tbody) => {
             for (var i = 0; i < checkboxesPerRow; i++) {
                 // Store a reference to the html object for later before we change itemName
                 var htmlNameObject = bundles[bundleName][itemName];
-                itemName = itemName + "-" + i;
+                var itemNameWithTag = itemName + "-" + i;
                 var newCheckbox = document.createElement("input");
                 $(newCheckbox).attr("type", "checkbox");
                 $(newCheckbox).attr("data-bundle-name", bundleName);
-                $(newCheckbox).attr("data-item-name", itemName);
+                $(newCheckbox).attr("data-item-name", itemNameWithTag);
                 $(newCheckbox).on("click", processClick);
                 // itemsToCheck might be null if the user hasn't checked any boxes in that bundle yet.
-                if (itemsToCheck && itemsToCheck.indexOf(itemName) >= 0) {
+                if (itemsToCheck && itemsToCheck.indexOf(itemNameWithTag) >= 0) {
                     $(newCheckbox).attr("checked", "true");
                 }
                 htmlNameObject.prepend(newCheckbox);
